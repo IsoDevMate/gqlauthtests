@@ -5,9 +5,20 @@ type User{
     password:String
 }
 
-type Query{
-     users: [User]
+
+
+type Badge {
+  id: ID
+  name: String
+  description: String
+  image: String
+  price: Int
 }
+
+type Payment {
+  url: String
+}
+
 
 type AuthPayload {
     token: String
@@ -21,4 +32,14 @@ password:String
 type Mutation {
   register(username: String!, input: UserInput!): User!
   login(input: UserInput!): AuthPayload!
+  purchaseBadge(userId: ID!, badgeId: ID!): Payment!
+  verifyUser(userId: ID!): String
+}
+
+type Query{
+     users: [User]
+     badges: [Badge]
+     getUser(id: ID!): User
+     getBadge(id: ID!): Badge
+     getUserByEmail(email: String!): User
 }

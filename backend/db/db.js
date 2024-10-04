@@ -13,16 +13,16 @@ module.exports = {
   getUser: async (id) => {
     return await db('users').where({ id }).select('*').first();
   },
-  pingDatabase: async () => {
-    try {
-      await db.raw('SELECT 1');
-      console.log('Database connected successfully.');
-      return true;
-    } catch (error) {
-      console.error('Database connection failed:', error);
-      return false;
-    }
+  getUserByEmail: async (email) => {
+    return await db('users').where({ email }).first();
   },
+  getBadges: async () => {
+        return await db('badges').select('*');
+ },  
+ getBadge: async (id) => {
+        return await db('badges').where({ id }).select('*').first();
+    },
+
   createUser: async (username, email, password) => {
     // Check if the email already exists
   const existingUser = await db('users').where({ email }).first();
@@ -50,5 +50,24 @@ module.exports = {
     }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     return { token };
+  },
+  purchaseBadge: async (userId, badgeId) => {
+    return await db('user_badges').insert({ user_id: userId, badge_id: badgeId });
+  },
+
+  verifyUser: async (userId) => {
+    return await db('users').where({ id: userId }).update({ verificationlevel: 'Gold' });
+  },
+
+  pingDatabase: async () => {
+    try {
+      await db.raw('SELECT 1');
+      console.log('Database connected successfully.');
+      return true;
+    } catch (error) {
+      console.error('Database connection failed:', error);
+      return false;
+    }
   }
+
 };
