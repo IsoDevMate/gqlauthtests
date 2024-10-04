@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "migrate": "npx knex migrate:latest --knexfile db/knexfile.js",
+    "start": "node index.js",
+    "initmigration": "npx knex migrate:make init --migrations-directory db/migrations",
+    "makemigration": "npx knex migrate:make $2 --migrations-directory db/migrations",
+    "rollback": "npx knex migrate:rollback --knexfile db/knexfile.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.9.0",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "nodemon": "^3.1.7",
+    "pg": "^8.13.0",
+    "uuid": "^10.0.0",
+    "uuid4": "^2.0.3"
+  }
+}
