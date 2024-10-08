@@ -73,10 +73,10 @@ jobs:
       
       - name: Get Fly App URL
         run: |
-          flyctl info --app woudouma --json | jq -r '.hostname'
-        id: get-app-url
+          flyctl status --app woudouma | grep "Hostname" | awk '{print $2}'
+        id: get-app-url  
       
       - name: Expose Fly App URL
         run: |
           echo "Fly App URL: https://${{ steps.get-app-url.outputs.hostname }}"
-          
+        
