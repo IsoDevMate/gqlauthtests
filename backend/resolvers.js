@@ -4,7 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 require('dotenv').config();
 
 const resolvers = {
-    Query: {
+  
   users: async () => {
     return await db.getUsers();
   },
@@ -22,16 +22,20 @@ const resolvers = {
     badge: async ({ id }) => {
     
     return await db.getBadge(id)
-
-    }
     },
-
-    Mutation: {
-  register: async ({ username, input }) => {
-    const { email, password } = input;
-    const user = await db.createUser(username, email, password);
-    return user[0];
-  },
+    register: async ({ username, input }) => {
+        const { email, password } = input;
+        try {
+          const user = await db.createUser(username, email, password);
+          if (!user || user.length === 0) {
+            throw new Error('Failed to create user');
+          }
+          return user[0]; 
+        } catch (error) {
+          console.error('Error registering user:', error);
+          throw new Error('Registration failed');
+        }
+      },
   login: async ({ input }) => {
     const { email, password } = input;
     const authPayload = await db.loginUser(email, password);
@@ -49,7 +53,7 @@ const resolvers = {
               product_data: {
                 name: badge.name,
               },
-              unit_amount: badge.price,
+              unit_amount: badge.price * 100,
             },
             quantity: 1,
           },
@@ -67,7 +71,7 @@ const resolvers = {
     await db.verifyUser(userId);
     return 'User verified successfully';
   },
-    },
-};
+    }
+
 
 module.exports = resolvers;

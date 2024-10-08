@@ -29,7 +29,7 @@ exports.up = function(knex) {
          table.timestamps(true, true);
      })
      .createTableIfNotExists('payments', function(table) {
-        table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'));
+        table.uuid('id').primary().defaultTo(uuidv4());
         table.uuid('user_id').notNullable().references('id').inTable('users').onDelete('CASCADE');
         table.uuid('badge_id').notNullable().references('id').inTable('badges').onDelete('CASCADE');
         table.string('payment_intent_id').notNullable();
@@ -42,6 +42,7 @@ exports.up = function(knex) {
         ]);
     });
 };
+
 
 /**
  * @param { import("knex").Knex } knex

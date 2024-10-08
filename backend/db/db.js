@@ -23,22 +23,34 @@ module.exports = {
         return await db('badges').where({ id }).select('*').first();
     },
 
-  createUser: async (username, email, password) => {
-    // Check if the email already exists
-  const existingUser = await db('users').where({ email }).first();
-  if (existingUser) {
-    throw new Error('A user with this email already exists');
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const userId = uuidv4(); 
-  return await db('users').insert({
-    id: userId,
-    username,
-    email,
-    password: hashedPassword
-  }).returning('*');
-    },
+    createUser: async (username, email, password) => {
+        try {
+          const existingUser = await db('users').where({ email }).first();
+          if (existingUser) {
+            throw new Error('A user with this email already exists');
+          }
+      
+          const hashedPassword = await bcrypt.hash(password, 10);
+          const userId = uuidv4(); 
+          const newUser = await db('users').insert({
+            id: userId,
+            username,
+            email,
+            password: hashedPassword,
+            verificationlevel: '0'
+          }).returning('*');
+      
+          if (!newUser || newUser.length === 0) {
+            throw new Error('User creation failed');
+          }
+      
+          return newUser;
+        } catch (error) {
+          console.error('Error creating user:', error);
+          throw new Error('Error during user creation');
+        }
+      },
+      
   loginUser: async (email, password) => {
     const user = await db('users').where({ email }).first();
     if (!user) {
