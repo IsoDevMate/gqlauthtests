@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "migrate": "npx knex migrate:latest --knexfile db/knexfile.js",
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "initmigration": "npx knex migrate:make init --migrations-directory db/migrations",
     "makemigration": "npx knex migrate:make $2 --migrations-directory db/migrations",
     "rollback": "npx knex migrate:rollback --knexfile db/knexfile.js"
