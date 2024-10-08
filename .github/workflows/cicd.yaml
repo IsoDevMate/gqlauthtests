@@ -74,7 +74,7 @@ jobs:
       
       - name: Get Fly App URL
         run: |
-          flyctl status --app woudouma | grep "Hostname" | awk '{print $2}'
+          flyctl status --app woud-ouma | grep "Hostname" | awk '{print $2}'
         id: get-app-url  
       
       - name: Expose Fly App URL
